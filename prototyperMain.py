@@ -16,6 +16,8 @@ conversationGPT = []
 conversationHTML = ""
 conversationRAW = ""
 
+addToConversation = ""
+
 openai.api_key = OPENAI_API_KEY
 
 labelCounter = 0
@@ -88,6 +90,10 @@ def whileSubblocks(block):
                 print(f"This is a Subblock_Image: {subblock.get_name()}.")
                 executeImage(subblock)
 
+        if type(subblock) is prototyperElements.Subblock_Special:
+                print(f"This is a Subblock_Special: {subblock.get_name()}.")
+                executeSpecial(subblock)
+
         if type(subblock) is prototyperElements.Subblock_Output:
                 print(f"This is a Subblock_Output: {subblock.get_name()}.")
                 executeOutput(subblock)
@@ -134,9 +140,16 @@ def executeImage(subblock):
      pictureThread.start()
      stableIteration += 1
 
-def executeOutput(subblock):
+def executeSpecial(subblock):
      subblockInput = subblock.get_input()
      subblock.set_output(combineInput(subblockInput))
+
+def executeOutput(subblock):
+     global addToConversation
+
+     subblockInputs = combineInput(subblock.get_input())
+     subblock.set_output(subblockInputs)
+     addToConversation = subblockInputs
 
 def combineInput(sublockInput):
     subblockNames = sublockInput.split('+')
@@ -289,21 +302,25 @@ def gptAddUserInput(conversation, content):
 def createLoopBlock(nameForBlock):
     loop_block = prototyperElements.Loop(nameForBlock,UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    conversationText = prototyperElements.Subblock_Output((nameForBlock+"_ConversationText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    conversationText = prototyperElements.Subblock_Special((nameForBlock+"_ConversationText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     conversationText.set_input("")
 
-    lastAISentence = prototyperElements.Subblock_Output((nameForBlock+"_LastAISentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastAISentence = prototyperElements.Subblock_Special((nameForBlock+"_LastAISentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     lastAISentence.set_input("")
+
+    lastUserSentence = prototyperElements.Subblock_Special((nameForBlock+"_LastUserSentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastUserSentence.set_input("")
 
     prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+"_prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     prototyper_input.set_prototyper_input("Converse with me in english.")
 
-    header = prototyperElements.Subblock_Output((nameForBlock+"_Header"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    header = prototyperElements.Subblock_Special((nameForBlock+"_Header"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     header.set_input(nameForBlock+"_prompt1")
 
 
     loop_block.add_subblock(conversationText)
     loop_block.add_subblock(lastAISentence)
+    loop_block.add_subblock(lastUserSentence)
     loop_block.add_subblock(prototyper_input)
     loop_block.add_subblock(header)
 
@@ -313,7 +330,7 @@ def createAsyncBlock(nameForBlock):
 
     async_block = prototyperElements.Async(nameForBlock, UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    eventText = prototyperElements.Subblock_Output((nameForBlock+"_EventText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    eventText = prototyperElements.Subblock_Special((nameForBlock+"_EventText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     eventText.set_input("")
 
     sentToUser = prototyperElements.Subblock_Output((nameForBlock+"_SendToUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
@@ -338,12 +355,15 @@ def sync():
     global doRestart
     global conversationHTML
     global conversationRAW
+    global addToConversation
 
 
     # Executing Instructions:
     #print(f"Initial instructions: {instructions}")
 
     #GUI render hierachy by printing(hierachyHTML)
+
+    clientInput = ""
 
     while True:
         index = 0
@@ -397,6 +417,17 @@ def sync():
                             if(subblock.get_name() == block.get_name()+"_LastAISentence"):
                                 subblock.set_input(output)
                                 print(f"lastAISentence input: {output}")
+
+                        #Set lastUserSentence Input
+                        for subblock in block:
+                            if(subblock.get_name() == block.get_name()+"_LastUserSentence"):
+                                subblock.set_input(clientInput)
+                                print(f"lastUserSentence input: {clientInput}")
+
+
+                        if(addToConversation != ""):
+                            addToOutputHTML = f"\n<font color=\"#209de0\">{addToConversation}</font>"
+                            conversationHTML += addToOutputHTML
 
 
                         outputLabel = f"ai{labelCounter}"
@@ -467,10 +498,12 @@ def pushAsync():
 
                     # Execute subblocks
                     whileSubblocks(block)
-                    asyncBlockOutput = getSubblockOutput(block.get_name()+"_SendToUser")
 
-                    # TODO Stich asyncBlock Output in ConversationHTML
-                    conversationHTML += f"\n<font color=\"#b670d6\">{asyncBlockOutput}</font>"
+                    # Set async Outputs
+                    for subblock in block:
+                        if(type(subblock) is prototyperElements.Subblock_Output):
+                            # TODO Stich asyncBlock Output in ConversationHTML by Tag
+                            conversationHTML += f"\n<font color=\"#b670d6\">{subblock.get_output()}</font>"
 
                 index += 1
 
@@ -716,11 +749,14 @@ instructions.append_block(static_block)
 # Loop Block:
 loop_block = prototyperElements.Loop("Loop",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-conversationText_example = prototyperElements.Subblock_Output(loop_block.get_name()+"_ConversationText",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+"_ConversationText",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 conversationText_example.set_input("")
 
-lastAISentence_example = prototyperElements.Subblock_Output(loop_block.get_name()+"_LastAISentence",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastAISentence_example = prototyperElements.Subblock_Special(loop_block.get_name()+"_LastAISentence",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastAISentence_example.set_input("")
+
+lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_name()+"_LastUserSentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastUserSentence_example.set_input("")
 
 pinput_example = prototyperElements.Subblock_Prototyper_Input("Prompt1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 pinput_example.set_prototyper_input("Converse with me to help me learn the english language. Never leave the roleplay.")
@@ -728,11 +764,12 @@ pinput_example.set_prototyper_input("Converse with me to help me learn the engli
 concat_example = prototyperElements.Subblock_Combine("Complete Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 concat_example.set_inputs("Prompt1+ The scenario for the roleplay is:+User Scenario")
 
-header_example = prototyperElements.Subblock_Output("Header",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+header_example = prototyperElements.Subblock_Special("Header",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 header_example.set_input("Complete Prompt")
 
 loop_block.add_subblock(conversationText_example)
 loop_block.add_subblock(lastAISentence_example)
+loop_block.add_subblock(lastUserSentence_example)
 loop_block.add_subblock(pinput_example)
 loop_block.add_subblock(concat_example)
 loop_block.add_subblock(header_example)

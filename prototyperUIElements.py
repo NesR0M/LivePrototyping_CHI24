@@ -82,11 +82,11 @@ class Block():
                                             object_id='#image_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
-        #self.output_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),500), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-        #                                    text="Output to Chat",
-        #                                    object_id='#output_block_button',
-        #                                    container= self.block_container,
-        #                                    manager= self.ui_manager)
+        self.output_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),500), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
+                                            text="Output to Chat",
+                                            object_id='#output_block_button',
+                                            container= self.block_container,
+                                            manager= self.ui_manager)
         self.hide_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.b_size[0]-10-(size_button_rectangle[0]*2), self.b_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
                                                 text="HIDE",
                                                 object_id='#hide_button',
@@ -258,7 +258,7 @@ class Subblock_Image(Subblock):
             html_text="name of the subblock",
             container=self.subblock_container)
 
-class Subblock_Output():
+class Subblock_Special():
     def __init__(self, ui_manager, sb_container, sb_size):
         self.ui_manager = ui_manager
         self.sb_container = sb_container
@@ -286,3 +286,25 @@ class Subblock_Output():
                                                 object_id='#save_button',
                                                 container= self.subblock_container,
                                                 manager=ui_manager)
+        
+
+class Subblock_Output(Subblock):
+    def __init__(self, ui_manager, sb_container, sb_size):
+        self.subblock_container = pygame_gui.elements.UIScrollingContainer(relative_rect=pygame.Rect((0, 0), 
+                                                        sb_size),
+                                                        manager=ui_manager, 
+                                                        object_id='#Subblock_Container',
+                                                        container=sb_container)
+        super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
+        self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            initial_text="enter your text here",
+            container=self.subblock_container)
+        self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
+            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            initial_text="enter your comment",
+            container=self.subblock_container)
+        self.name_box = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            html_text="name of the subblock",
+            container=self.subblock_container)

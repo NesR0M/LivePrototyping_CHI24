@@ -183,6 +183,34 @@ class Subblock_Image(Subblock):
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, input={self.input!r}, negativeInput={self.negativeInput!r}, output={self.output!r})"
     
+class Subblock_Special(Subblock):
+    def __init__(self, name, ui_manager, sb_container, sb_size):
+        super().__init__(name)
+        self.input = ""
+        self.uiInstance = prototyperUIElements.Subblock_Special(ui_manager, sb_container, sb_size)
+        self.uiInstance.name_box.set_text(name)
+
+    def set_name(self, name):
+        self.name = name
+        self.uiInstance.name_box.set_text(name)
+
+    def set_input(self, input):
+        self.input = input
+
+    def get_input(self):
+        return self.input
+    
+    def save(self):
+        self.input = self.uiInstance.prompt_entry_box.get_text()
+        self.comment = self.uiInstance.comment_entry_box.get_text()
+
+    def load(self):
+        self.uiInstance.prompt_entry_box.set_text(self.input)
+        self.uiInstance.comment_entry_box.set_text(self.comment)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name!r}, input={self.input!r}, output={self.output!r})"
+    
 class Subblock_Output(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
@@ -357,12 +385,14 @@ def printOut(instructionList, subblockNameForPointer):
                     printOut += f"{pointerStr} AI <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_User_Input:
                     printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
-                elif type(subblock) is Subblock_Output and "Header" in subblock.get_name():
+                elif type(subblock) is Subblock_Special and "Header" in subblock.get_name():
                     printOut += f"{pointerStr} AI <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
-                elif type(subblock) is Subblock_Output and "Async_SendToUser" in subblock.get_name():
+                elif type(subblock) is Subblock_Special and "Async_SendToUser" in subblock.get_name():
                     printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
-                elif type(subblock) is Subblock_Output:
+                elif type(subblock) is Subblock_Special:
                     printOut += f"{pointerStr} > <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                elif type(subblock) is Subblock_Output:
+                    printOut += f"{pointerStr} << <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 else:
                     printOut += f"{pointerStr} - <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
 

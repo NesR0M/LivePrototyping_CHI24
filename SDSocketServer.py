@@ -30,24 +30,46 @@ def main():
 
         splitPrompts = prompt.split('+')
         #TODO ADD CODE FOR MISSING NEGATIVE
-        payload = {
-            "enable_hr": True,
-            "denoising_strength": 0.58,
-            "firstphase_width": 384,
-            "firstphase_height": 768,
-            "hr_scale": 2,
-            "hr_upscaler": "Latent",
-            "hr_second_pass_steps": 20,
-            "prompt": splitPrompts[0],
-            "seed": -1,
-            "sampler_name": "DPM++ 2M Karras",
-            "steps": 25,
-            "cfg_scale": 10,
-            "width": 384,
-            "height": 768,
-            "negative_prompt": "EasyNegativeV2, badhandv4, "+splitPrompts[1],
-            "eta": 31337,
-        }
+
+        if(len(splitPrompts) == 2):
+            payload = {
+                "enable_hr": True,
+                "denoising_strength": 0.58,
+                "firstphase_width": 384,
+                "firstphase_height": 768,
+                "hr_scale": 2,
+                "hr_upscaler": "Latent",
+                "hr_second_pass_steps": 20,
+                "prompt": splitPrompts[0],
+                "seed": -1,
+                "sampler_name": "DPM++ 2M Karras",
+                "steps": 25,
+                "cfg_scale": 10,
+                "width": 384,
+                "height": 768,
+                "negative_prompt": "EasyNegativeV2, badhandv4, "+splitPrompts[1],
+                "eta": 31337,
+            }
+        else:
+            payload = {
+                "enable_hr": True,
+                "denoising_strength": 0.58,
+                "firstphase_width": 384,
+                "firstphase_height": 768,
+                "hr_scale": 2,
+                "hr_upscaler": "Latent",
+                "hr_second_pass_steps": 20,
+                "prompt": splitPrompts[0],
+                "seed": -1,
+                "sampler_name": "DPM++ 2M Karras",
+                "steps": 25,
+                "cfg_scale": 10,
+                "width": 384,
+                "height": 768,
+                "negative_prompt": "EasyNegativeV2, badhandv4",
+                "eta": 31337,
+            }
+
         response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
         r = response.json()
         for i in r['images']:
