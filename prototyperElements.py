@@ -6,6 +6,7 @@ class Subblock:
         self.name = name
         self.output = ""
         self.comment = ""
+        self.input = ""
 
     def set_output(self, output):
         self.output = output
@@ -18,6 +19,12 @@ class Subblock:
 
     def get_name(self):
         return self.name
+    
+    def set_input(self, input):
+        self.input = input
+
+    def get_input(self):
+        return self.input
 
     def save():
         return
@@ -28,41 +35,31 @@ class Subblock:
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, output={self.output!r})"
     
-    
-
 class Subblock_User_Input(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name) # variable name of output
-        self.requestVarForUser = "default"
         self.uiInstance = prototyperUIElements.Subblock_User_Input(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-    def set_requestVarForUser(self, requestVarForUser):
-        self.requestVarForUser = requestVarForUser
-
-    def get_requestVarForUser(self):
-        return self.requestVarForUser
     
     def save(self):
-        self.requestVarForUser = self.uiInstance.prompt_entry_box.get_text()
+        self.input = self.uiInstance.prompt_entry_box.get_text()
         self.comment = self.uiInstance.comment_entry_box.get_text()
 
     def load(self):
-        self.uiInstance.prompt_entry_box.set_text(self.requestVarForUser)
+        self.uiInstance.prompt_entry_box.set_text(self.input)
         self.uiInstance.comment_entry_box.set_text(self.comment)
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}(name={self.name!r}, requestForUser={self.requestVarForUser!r}, "
+        return (f"{self.__class__.__name__}(name={self.name!r}, requestForUser={self.input!r}, "
                 f"user_input={self.user_input!r}, output={self.output!r})")
 
 class Subblock_Prototyper_Input(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)  # variable name of output
-        self.prototyper_input = "" # = output value
         self.uiInstance = prototyperUIElements.Subblock_Prototyper_Input(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
@@ -70,68 +67,47 @@ class Subblock_Prototyper_Input(Subblock):
         self.name = name
         self.uiInstance.name_box.set_text(name)
 
-    def set_prototyper_input(self, prototyper_input):
-        self.prototyper_input = prototyper_input
-
-    def get_prototyper_input(self):
-        return self.prototyper_input
-
     def save(self):
-        self.prototyper_input = self.uiInstance.prompt_entry_box.get_text()
+        self.input = self.uiInstance.prompt_entry_box.get_text()
         self.comment = self.uiInstance.comment_entry_box.get_text()
 
     def load(self):
-        self.uiInstance.prompt_entry_box.set_text(self.prototyper_input)
+        self.uiInstance.prompt_entry_box.set_text(self.input)
         self.uiInstance.comment_entry_box.set_text(self.comment)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(name={self.name!r}, prototyper_input={self.prototyper_input!r}, output={self.output!r})"
+        return f"{self.__class__.__name__}(name={self.name!r}, prototyper_input={self.input!r}, output={self.output!r})"
 
 class Subblock_Combine(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
-        self.inputs = "" # = output value
         self.uiInstance = prototyperUIElements.Subblock_Combine(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-    def set_inputs(self, inputs):
-        self.inputs = inputs
-
-    def get_inputs(self):
-        return self.inputs
     
     def save(self):
-        self.inputs = self.uiInstance.prompt_entry_box.get_text()
+        self.input = self.uiInstance.prompt_entry_box.get_text()
         self.comment = self.uiInstance.comment_entry_box.get_text()
 
     def load(self):
-        self.uiInstance.prompt_entry_box.set_text(self.inputs)
+        self.uiInstance.prompt_entry_box.set_text(self.input)
         self.uiInstance.comment_entry_box.set_text(self.comment)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(name={self.name!r}, inputs={self.inputs!r}, output={self.output!r})"
-
+        return f"{self.__class__.__name__}(name={self.name!r}, inputs={self.input!r}, output={self.output!r})"
 
 class Subblock_SendToGPT(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
-        self.input = ""
         self.uiInstance = prototyperUIElements.Subblock_SendToGPT(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-    def set_input(self, input):
-        self.input = input
-
-    def get_input(self):
-        return self.input
     
     def save(self):
         self.input = self.uiInstance.prompt_entry_box.get_text()
@@ -148,21 +124,13 @@ class Subblock_SendToGPT(Subblock):
 class Subblock_Image(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
-        self.input = ""
-        self.negativeInput = ""
         self.uiInstance = prototyperUIElements.Subblock_Image(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
+        self.negativeInput = ""
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-
-    def set_input(self, input):
-        self.input = input
-
-    def get_input(self):
-        return self.input
     
     def set_negativeInput(self, negativeInput):
         self.negativeInput = negativeInput
@@ -186,19 +154,12 @@ class Subblock_Image(Subblock):
 class Subblock_Special(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
-        self.input = ""
         self.uiInstance = prototyperUIElements.Subblock_Special(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-    def set_input(self, input):
-        self.input = input
-
-    def get_input(self):
-        return self.input
     
     def save(self):
         self.input = self.uiInstance.prompt_entry_box.get_text()
@@ -214,19 +175,12 @@ class Subblock_Special(Subblock):
 class Subblock_Output(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
-        self.input = ""
         self.uiInstance = prototyperUIElements.Subblock_Output(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
         self.name = name
         self.uiInstance.name_box.set_text(name)
-
-    def set_input(self, input):
-        self.input = input
-
-    def get_input(self):
-        return self.input
     
     def save(self):
         self.input = self.uiInstance.prompt_entry_box.get_text()
@@ -314,7 +268,6 @@ class Async(Block):
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, output={self.output!r}, subblocks={self.subblocks!r})"
-
 
 class Instructions:
     def __init__(self, blocks):

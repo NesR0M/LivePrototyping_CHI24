@@ -102,7 +102,7 @@ chunk = 1024
 format = pyaudio.paInt16
 channels = 1
 rate = 44100
-filename = 'sound/output.wav'
+filename = 'sounds/output.wav'
 
 #-------------------------------------FUNCTIONS--------------------------------------------------------
 def extract_text(input_string):
@@ -459,11 +459,11 @@ while running:
                 saveAudioToFile()
 
                 duration = 0
-                with wave.open("sound/output.wav") as currentA:
+                with wave.open("sounds/output.wav") as currentA:
                     duration = currentA.getnframes() / currentA.getframerate()
                 
                 #send file to whisper
-                audio_file = open("sound/output.wav", "rb")
+                audio_file = open("sounds/output.wav", "rb")
                 if  duration > 1:
                     transcript = openai.Audio.transcribe("whisper-1", audio_file)
 

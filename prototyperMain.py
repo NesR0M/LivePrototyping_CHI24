@@ -16,8 +16,6 @@ conversationGPT = []
 conversationHTML = ""
 conversationRAW = ""
 
-addToConversation = ""
-
 openai.api_key = OPENAI_API_KEY
 
 labelCounter = 0
@@ -101,16 +99,16 @@ def whileSubblocks(block):
         index += 1
 
 def executeUserInput(subblock):
-     # send input request text requestVarForUser to user
-     # (this has to use the sync code to send the text request ?)
-     # write received user input to output var
-     subblock.set_output(sendAndReceive(subblock.get_requestVarForUser()))
+    # send input request text requestVarForUser to user
+    # (this has to use the sync code to send the text request ?)
+    # write received user input to output var
+    subblock.set_output(sendAndReceive(combineInput(subblock.get_input())))
 
 def executePrototyperInput(subblock):
-     # this is text only
-     # text input by prototyper is set through GUI
-     # we set the output as the text input of the prototyper
-     subblock.set_output(subblock.get_prototyper_input())
+    # this is text only
+    # text input by prototyper is set through GUI
+    # we set the output as the text input of the prototyper
+    setOutput(subblock)
 
 def executeCombine(subblock):
     # here we receive a text consisting of subblock names, whose text we concatenate
@@ -118,56 +116,44 @@ def executeCombine(subblock):
     # look up all names after splitting
     # use getSubblockOutput to take their output
     # concatenate the result in the output variable which makes them available
-    subblock.set_output(combineInput(subblock.get_inputs()))
+    setOutput(subblock)
 
 def executeSendToGPT(subblock):
-     # we have the input from the UI
-     # the input is always an output of another subblock (text), use getSubblockOutput to find it
-     # use the input as the prompt parameter for the askGPT function call
-     # the return value of the askGPT call gets written to the output of this subblock
-     subblock.set_output(askGPT(combineInput(subblock.get_input())))
+    # we have the input from the UI
+    # the input is always an output of another subblock (text), use getSubblockOutput to find it
+    # use the input as the prompt parameter for the askGPT function call
+    # the return value of the askGPT call gets written to the output of this subblock
+    subblock.set_output(askGPT(combineInput(subblock.get_input())))
 
 def executeImage(subblock):
-     global stableIteration
-     # we are provided with to variables here, positive and negative prompt
-     # add positive and negative to the prompt:
-     #  to do this call stableDifPayload in prompting.py with these values (must be extended to change negative)
-     # call the stablePicture function with the global variable stableIteration and imagePrompt
-     # load the image from file (stablePicture isn't finished until it is written to file anyways)
-     # increment the stableIteration variable
-     #stablePicture(stableIteration, prompting.stableDifpayload(subblock.get_input(), subblock.get_negativeInput()))
-     pictureThread = threading.Thread(target=stablePicture, args=(stableIteration, combineInput(subblock.get_input())+"+"+combineInput(subblock.get_negativeInput()),))
-     pictureThread.start()
-     stableIteration += 1
+    global stableIteration
+    # we are provided with to variables here, positive and negative prompt
+    # add positive and negative to the prompt:
+    #  to do this call stableDifPayload in prompting.py with these values (must be extended to change negative)
+    # call the stablePicture function with the global variable stableIteration and imagePrompt
+    # load the image from file (stablePicture isn't finished until it is written to file anyways)
+    # increment the stableIteration variable
+    #stablePicture(stableIteration, prompting.stableDifpayload(subblock.get_input(), subblock.get_negativeInput()))
+    pictureThread = threading.Thread(target=stablePicture, args=(stableIteration, combineInput(subblock.get_input())+"+"+combineInput(subblock.get_negativeInput()),))
+    pictureThread.start()
+    stableIteration += 1
 
 def executeSpecial(subblock):
-     subblockInput = subblock.get_input()
-     subblock.set_output(combineInput(subblockInput))
+    setOutput(subblock)
 
 def executeOutput(subblock):
-     global addToConversation
+    setOutput(subblock)
+    
 
-     subblockInputs = combineInput(subblock.get_input())
-     subblock.set_output(subblockInputs)
-     addToConversation = subblockInputs
+def setOutput(subblock):
+    subblock.set_output(combineInput(subblock.get_input()))
 
 def combineInput(sublockInput):
     subblockNames = sublockInput.split('+')
     concatOuts = ""
     for name in subblockNames:
-        concatOuts = concatOuts + " " + getSubblockOutput(name)
+        concatOuts += " " + getSubblockOutput(name)
     return concatOuts
-     
-def getBlock(blockName):
-    for block in instructions:
-        if block.get_name() == blockName:
-            return block
-        
-def getSubblock(subblockName):
-    for block in instructions:
-        for subblock in block:
-            if subblock.get_name() == subblockName:
-                return subblock
 
 def getSubblockOutput(subblockName):
     # call getBlocks on instructions (list) -> call getSubblocks on blocks (list) -> call getOutput on subblock
@@ -179,6 +165,16 @@ def getSubblockOutput(subblockName):
                 return subblock.get_output()
     return subblockName
 
+def getBlock(blockName):
+    for block in instructions:
+        if block.get_name() == blockName:
+            return block
+        
+def getSubblock(subblockName):
+    for block in instructions:
+        for subblock in block:
+            if subblock.get_name() == subblockName:
+                return subblock
 
 def deleteSubblock(subblockToDelete):
     index = 0
@@ -312,7 +308,7 @@ def createLoopBlock(nameForBlock):
     lastUserSentence.set_input("")
 
     prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+"_prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-    prototyper_input.set_prototyper_input("Converse with me in english.")
+    prototyper_input.set_input("Converse with me in english.")
 
     header = prototyperElements.Subblock_Special((nameForBlock+"_Header"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     header.set_input(nameForBlock+"_prompt1")
@@ -355,7 +351,6 @@ def sync():
     global doRestart
     global conversationHTML
     global conversationRAW
-    global addToConversation
 
 
     # Executing Instructions:
@@ -424,10 +419,10 @@ def sync():
                                 subblock.set_input(clientInput)
                                 print(f"lastUserSentence input: {clientInput}")
 
-
-                        if(addToConversation != ""):
-                            addToOutputHTML = f"\n<font color=\"#209de0\">{addToConversation}</font>"
-                            conversationHTML += addToOutputHTML
+                        # Set async Outputs
+                        for subblock in block:
+                            if(type(subblock) is prototyperElements.Subblock_Output):
+                                conversationHTML += f"\n<font color=\"#209de0\">{subblock.get_output()}</font>"
 
 
                         outputLabel = f"ai{labelCounter}"
@@ -726,10 +721,10 @@ AddButtonScreen = prototyperUIElements.AddButtonScreen(UI_MANAGER,WINDOW_CONTAIN
 #--------------LOAD EXAMPLE INSTRUCTIONS:---------------------
 
 # Static Block Intro
-static_block = prototyperElements.Static("UserInput",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+static_block = prototyperElements.Static("Structure",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
 input_example = prototyperElements.Subblock_User_Input("User Scenario",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-input_example.set_requestVarForUser("Hello! Please enter the scenario you want to Roleplay:")
+input_example.set_input("Hello! Please enter the scenario you want to Roleplay:")
 
 sendToGPT_example = prototyperElements.Subblock_SendToGPT("Generate Image Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 sendToGPT_example.set_input("Based on this scenario:+User Scenario+. Create me 30 single words, delimited by comma, to create a suiting image.")
@@ -747,7 +742,7 @@ instructions.append_block(static_block)
 
 
 # Loop Block:
-loop_block = prototyperElements.Loop("Loop",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+loop_block = prototyperElements.Loop("Conversation",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
 conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+"_ConversationText",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 conversationText_example.set_input("")
@@ -759,10 +754,10 @@ lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_n
 lastUserSentence_example.set_input("")
 
 pinput_example = prototyperElements.Subblock_Prototyper_Input("Prompt1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-pinput_example.set_prototyper_input("Converse with me to help me learn the english language. Never leave the roleplay.")
+pinput_example.set_input("Converse with me to help me learn the english language. Never leave the roleplay.")
 
 concat_example = prototyperElements.Subblock_Combine("Complete Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-concat_example.set_inputs("Prompt1+ The scenario for the roleplay is:+User Scenario")
+concat_example.set_input("Prompt1+ The scenario for the roleplay is:+User Scenario")
 
 header_example = prototyperElements.Subblock_Special("Header",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 header_example.set_input("Complete Prompt")
@@ -777,7 +772,7 @@ loop_block.add_subblock(header_example)
 instructions.append_block(loop_block)
 
 # Async:
-instructions.append_block(createAsyncBlock("Async"))
+instructions.append_block(createAsyncBlock("OnClickFeature"))
 
 
 #------------------------------DISPLAY STARTING ELEMENTS------------------------
