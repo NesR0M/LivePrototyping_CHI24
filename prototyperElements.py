@@ -1,4 +1,4 @@
-import prototypingUIElements
+import prototyperUIElements
 #---------------------------SUBBLOCKS-------------------------------
 
 class Subblock:
@@ -34,7 +34,7 @@ class Subblock_User_Input(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name) # variable name of output
         self.requestVarForUser = "default"
-        self.uiInstance = prototypingUIElements.Subblock_User_Input(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_User_Input(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -63,7 +63,7 @@ class Subblock_Prototyper_Input(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)  # variable name of output
         self.prototyper_input = "" # = output value
-        self.uiInstance = prototypingUIElements.Subblock_Prototyper_Input(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_Prototyper_Input(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -91,7 +91,7 @@ class Subblock_Combine(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
         self.inputs = "" # = output value
-        self.uiInstance = prototypingUIElements.Subblock_Combine(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_Combine(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -120,7 +120,7 @@ class Subblock_SendToGPT(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
         self.input = ""
-        self.uiInstance = prototypingUIElements.Subblock_SendToGPT(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_SendToGPT(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -150,7 +150,7 @@ class Subblock_Image(Subblock):
         super().__init__(name)
         self.input = ""
         self.negativeInput = ""
-        self.uiInstance = prototypingUIElements.Subblock_Image(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_Image(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -187,7 +187,7 @@ class Subblock_Output(Subblock):
     def __init__(self, name, ui_manager, sb_container, sb_size):
         super().__init__(name)
         self.input = ""
-        self.uiInstance = prototypingUIElements.Subblock_Output(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Subblock_Output(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def set_name(self, name):
@@ -220,7 +220,7 @@ class Block:
         self.name = name
         self.output = None
         self.subblocks = []
-        self.uiInstance = prototypingUIElements.Block(ui_manager, sb_container, sb_size)
+        self.uiInstance = prototyperUIElements.Block(ui_manager, sb_container, sb_size)
         self.uiInstance.name_box.set_text(name)
 
     def __iter__(self):
