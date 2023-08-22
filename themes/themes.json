@@ -58,5 +58,19 @@
             "path": "images/output_0.png",
             "sub_surface_rect": "0,0,384,768"
         }
+    },
+    "text_box":
+    {
+        "misc":
+        {
+            "border_width": "1"
+        }
+    },
+    "text_entry_box":
+    {
+        "misc":
+        {
+            "border_width": "1"
+        }
     }
 }

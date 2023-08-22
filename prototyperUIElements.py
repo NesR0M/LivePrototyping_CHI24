@@ -51,7 +51,7 @@ class Block():
                                                         container=b_container)       
         self.name_entry_box = pygame_gui.elements.UITextEntryBox(
             relative_rect=pygame.Rect((0, 140), (self.b_size[0],40)),
-            initial_text="enter the name of the subblock",
+            placeholder_text = "enter the name of your new element",
             container=self.block_container)
         self.name_entry_title = pygame_gui.elements.UITextBox(
             relative_rect=pygame.Rect((0, 100), (self.b_size[0],40)),

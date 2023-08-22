@@ -298,20 +298,20 @@ def gptAddUserInput(conversation, content):
 def createLoopBlock(nameForBlock):
     loop_block = prototyperElements.Loop(nameForBlock,UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    conversationText = prototyperElements.Subblock_Special((nameForBlock+"_ConversationText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    conversationText = prototyperElements.Subblock_Special((nameForBlock+" text"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     conversationText.set_input("")
 
-    lastAISentence = prototyperElements.Subblock_Special((nameForBlock+"_LastAISentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastAISentence = prototyperElements.Subblock_Special((nameForBlock+" lastAI"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     lastAISentence.set_input("")
 
-    lastUserSentence = prototyperElements.Subblock_Special((nameForBlock+"_LastUserSentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastUserSentence = prototyperElements.Subblock_Special((nameForBlock+" lastUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     lastUserSentence.set_input("")
 
-    prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+"_prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+" prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     prototyper_input.set_input("Converse with me in english.")
 
-    header = prototyperElements.Subblock_Special((nameForBlock+"_Header"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-    header.set_input(nameForBlock+"_prompt1")
+    header = prototyperElements.Subblock_Special((nameForBlock+" conversation prompt"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    header.set_input(nameForBlock+" prompt1")
 
 
     loop_block.add_subblock(conversationText)
@@ -326,7 +326,7 @@ def createAsyncBlock(nameForBlock):
 
     async_block = prototyperElements.Async(nameForBlock, UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    eventText = prototyperElements.Subblock_Special((nameForBlock+"input"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    eventText = prototyperElements.Subblock_Special((nameForBlock+" text"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     eventText.set_input("")
 
 
@@ -375,15 +375,14 @@ def sync():
                     while not doRestart:
                         whileSubblocks(block)
 
-                        
                         # Send the message to the server / user
                         print("AI TEXTBLOX ERREICHT")
                         if(conversationGPT == []):
-                            prompt = getSubblockOutput("Header")
+                            prompt = getSubblockOutput("Combine Prompt")
                             conversationGPT.append({"role": "system", "content": prompt})
                             conversationGPT.append({"role": "user", "content": ""})
                         else:
-                            conversationGPT = gptHeaderChange(conversationGPT, getSubblockOutput("Header"))
+                            conversationGPT = gptHeaderChange(conversationGPT, getSubblockOutput("Combine Prompt"))
                         
                         print(conversationGPT)
 
@@ -452,6 +451,10 @@ def sync():
                 conversationRAW = ""
                 conversationGPT = []
                 index = 0
+
+                answer = sendAndReceive("restart")
+                print(f"{answer}")
+
         except Exception as e:
             print(f'Exception in sync thread {str(e)}')
             break
@@ -739,23 +742,23 @@ instructions.append_block(static_block)
 # Loop Block:
 loop_block = prototyperElements.Loop("Conversation",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+"_ConversationText",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+" text",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 conversationText_example.set_input("")
 
-lastAISentence_example = prototyperElements.Subblock_Special(loop_block.get_name()+"_LastAISentence",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastAISentence_example = prototyperElements.Subblock_Special(loop_block.get_name()+" lastAI",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastAISentence_example.set_input("")
 
-lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_name()+"_LastUserSentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_name()+" lastUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastUserSentence_example.set_input("")
 
-pinput_example = prototyperElements.Subblock_Prototyper_Input("Prompt1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+pinput_example = prototyperElements.Subblock_Prototyper_Input("Input1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 pinput_example.set_input("Converse with me to help me learn the english language. Never leave the roleplay.")
 
-concat_example = prototyperElements.Subblock_Combine("Complete Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-concat_example.set_input("Prompt1+The scenario for the roleplay is:+User Scenario")
+concat_example = prototyperElements.Subblock_Combine("Combine Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+concat_example.set_input("Input1+The scenario for the roleplay is:+User Scenario")
 
-header_example = prototyperElements.Subblock_Special("Header",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-header_example.set_input("Complete Prompt")
+header_example = prototyperElements.Subblock_Special("Conversation Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+header_example.set_input("Combine Prompt")
 
 loop_block.add_subblock(conversationText_example)
 loop_block.add_subblock(lastAISentence_example)
@@ -767,7 +770,7 @@ loop_block.add_subblock(header_example)
 instructions.append_block(loop_block)
 
 # Async:
-instructions.append_block(createAsyncBlock("Click"))
+instructions.append_block(createAsyncBlock("Clicked"))
 
 
 #------------------------------DISPLAY STARTING ELEMENTS------------------------
@@ -835,7 +838,8 @@ while running:
             #-----ADD BLOCK BUTTONS:
 
             elif(event.ui_object_id == '#window_container.#AddButton_Container.#pre_block_button'):
-                nameForBlock = AddButtonScreen.name_entry_box.get_text()               
+                nameForBlock = AddButtonScreen.name_entry_box.get_text()
+                               
                 newBlock = prototyperElements.Static(nameForBlock, UI_MANAGER,WINDOW_CONTAINER, window_container_size)
                 instructions.append_block(newBlock) # TODO APPEND BEFORE LOOP
                 TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
@@ -845,20 +849,22 @@ while running:
 
             elif(event.ui_object_id == '#window_container.#AddButton_Container.#loop_block_button'):
                 nameForBlock = AddButtonScreen.name_entry_box.get_text()    
-
+                
                 instructions.append_block(createLoopBlock(nameForBlock)) # TODO APPEND IN LOOP
                 TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
                 disableContainers()
 
             elif(event.ui_object_id == '#window_container.#AddButton_Container.#post_block_button'):
-                nameForBlock = AddButtonScreen.name_entry_box.get_text()               
+                nameForBlock = AddButtonScreen.name_entry_box.get_text()  
+                              
                 newBlock = prototyperElements.Static(nameForBlock, UI_MANAGER,WINDOW_CONTAINER, window_container_size)
                 instructions.append_block(newBlock) # TODO APPEND AFTER LOOP
                 TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
                 disableContainers()
 
             elif(event.ui_object_id == '#window_container.#AddButton_Container.#async_block_button'):
-                nameForBlock = AddButtonScreen.name_entry_box.get_text()            
+                nameForBlock = AddButtonScreen.name_entry_box.get_text() 
+                           
                 instructions.append_block(createAsyncBlock(nameForBlock))   
                 TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
                 disableContainers()
@@ -869,56 +875,62 @@ while running:
             elif(event.ui_object_id == '#window_container.#Block_Container.#user_input_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_User_Input(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_User_Input(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
 
             elif(event.ui_object_id == '#window_container.#Block_Container.#prototyper_input_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_Prototyper_Input(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_Prototyper_Input(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
 
             elif(event.ui_object_id == '#window_container.#Block_Container.#combine_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_Combine(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_Combine(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
 
             elif(event.ui_object_id == '#window_container.#Block_Container.#sendToGPT_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_SendToGPT(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_SendToGPT(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
             
             elif(event.ui_object_id == '#window_container.#Block_Container.#image_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_Image(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_Image(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
 
             elif(event.ui_object_id == '#window_container.#Block_Container.#output_block_button'):
                 if(visibleBlock != None):
                     nameForSubblock = visibleBlock.uiInstance.name_entry_box.get_text() 
-                    newSubblock = prototyperElements.Subblock_Output(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
-                    visibleBlock.add_subblock(newSubblock)
-                    TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
+                    if(nameForSubblock != "enter name"):
+                        newSubblock = prototyperElements.Subblock_Output(nameForSubblock, UI_MANAGER,WINDOW_CONTAINER, window_container_size) 
+                        visibleBlock.add_subblock(newSubblock)
+                        TEXT_HIERACHY.set_text(prototyperElements.printOut(instructions, " "))
 
-                    disableContainers()
+                        disableContainers()
 
             elif(event.ui_object_id == '#hierachy_container.#restart_button'):
                 disableContainers() 
@@ -931,7 +943,7 @@ while running:
             block = getBlock(linkText)
             if(block != None):
                 disableContainers()
-                block.load()
+                block.load() #does nothing
                 block.uiInstance.block_container.enable()
                 block.uiInstance.block_container.show()
                 visibleBlock = block

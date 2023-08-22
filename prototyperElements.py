@@ -236,7 +236,7 @@ class Block:
         pass
 
     def load(self):
-        self.uiInstance.name_entry_box.set_text("EnterSubblockName")
+        self.uiInstance.name_entry_box.set_text("enter name")
 
     # def move()    
 

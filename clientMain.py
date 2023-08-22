@@ -1,5 +1,6 @@
 import pickle
 import socket
+import time
 import openai
 import pygame
 import pygame_gui
@@ -151,6 +152,17 @@ def loadImage(image_data):
     screen.blit(background_image, (0, 0))
     pygame.display.update()
 
+def loadExampleImage():
+    global background_image
+    image_path = f'images/black.png'
+
+    background_image = pygame.image.load(image_path)
+    background_image = pygame.transform.scale(background_image, image_size)
+    print("Image is loaded")
+    screen.blit(background_image, (0, 0))
+    pygame.display.update()
+    
+
 def recordAudio():
         global audio_frames, is_recording
         audio_frames = []
@@ -197,6 +209,14 @@ def syncSocket_thread():
     while running:
         try:
             messageFromPrototyper = prototyper_socket.recv(50000).decode()  # Receive the message from the client
+
+            if(messageFromPrototyper == "restart"):
+                print("Loading example picture")
+                loadExampleImage()
+                time.sleep(2)
+                answer = "ok"
+                prototyper_socket.send(answer.encode())
+                continue
 
             print(f"The message from the prototyper is: {messageFromPrototyper}")
 
