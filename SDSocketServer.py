@@ -1,4 +1,5 @@
 import socket
+import json
 import requests
 import io
 import base64
@@ -29,9 +30,9 @@ def main():
         prompt = client_socket.recv(1024).decode()  # Receive the message from the client
 
         splitPrompts = prompt.split('+')
-        #TODO ADD CODE FOR MISSING NEGATIVE
-
-        if(len(splitPrompts) == 2):
+        while (len(splitPrompts) <= 2):
+          splitPrompts.append("")
+        if (splitPrompts[0] != ""):
             payload = {
                 "enable_hr": True,
                 "denoising_strength": 0.58,
@@ -47,42 +48,22 @@ def main():
                 "cfg_scale": 10,
                 "width": 384,
                 "height": 768,
-                "negative_prompt": "EasyNegativeV2, badhandv4, "+splitPrompts[1],
+                "negative_prompt": "EasyNegativeV2, badhandv4, " + splitPrompts[1],
                 "eta": 31337,
             }
-        else:
-            payload = {
-                "enable_hr": True,
-                "denoising_strength": 0.58,
-                "firstphase_width": 384,
-                "firstphase_height": 768,
-                "hr_scale": 2,
-                "hr_upscaler": "Latent",
-                "hr_second_pass_steps": 20,
-                "prompt": splitPrompts[0],
-                "seed": -1,
-                "sampler_name": "DPM++ 2M Karras",
-                "steps": 25,
-                "cfg_scale": 10,
-                "width": 384,
-                "height": 768,
-                "negative_prompt": "EasyNegativeV2, badhandv4",
-                "eta": 31337,
-            }
-
-        response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
-        r = response.json()
-        for i in r['images']:
-            image = Image.open(io.BytesIO(base64.b64decode(i.split(",",1)[0])))
-            png_payload = {
-                "image": "data:image/png;base64," + i
-            }
-            response2 = requests.post(url=f'{url}/sdapi/v1/png-info', json=png_payload)
-            pnginfo = PngImagePlugin.PngInfo()
-            pnginfo.add_text("parameters", response2.json().get("info"))
-            image.save('output.png', pnginfo=pnginfo)
-        
-        send_image(client_socket, image_path)
+            response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
+            r = response.json()
+            for i in r['images']:
+                image = Image.open(io.BytesIO(base64.b64decode(i.split(",",1)[0])))
+                png_payload = {
+                    "image": "data:image/png;base64," + i
+                }
+                response2 = requests.post(url=f'{url}/sdapi/v1/png-info', json=png_payload)
+                pnginfo = PngImagePlugin.PngInfo()
+                pnginfo.add_text("parameters", response2.json().get("info"))
+                image.save('output.png', pnginfo=pnginfo)
+            
+            send_image(client_socket, image_path)
         client_socket.close()
 
 if __name__ == '__main__':
