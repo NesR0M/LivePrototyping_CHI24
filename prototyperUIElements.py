@@ -87,16 +87,16 @@ class Block():
                                             object_id='#output_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
-        self.hide_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.b_size[0]-10-(size_button_rectangle[0]*2), self.b_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
-                                                text="HIDE",
-                                                object_id='#hide_button',
-                                                container= self.block_container,
-                                                manager=ui_manager)
-        self.delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.b_size[0]-10-(size_button_rectangle[0]*3), self.b_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
-                                                text="DEL",
-                                                object_id='#del_button',
-                                                container= self.block_container,
-                                                manager=ui_manager)
+        #self.hide_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.b_size[0]-10-(size_button_rectangle[0]*2), self.b_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
+        #                                        text="HIDE",
+        #                                        object_id='#hide_button',
+        #                                        container= self.block_container,
+        #                                        manager=ui_manager)
+        #self.delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.b_size[0]-10-(size_button_rectangle[0]*3), self.b_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
+        #                                        text="DEL",
+        #                                        object_id='#del_button',
+        #                                        container= self.block_container,
+        #                                        manager=ui_manager)
         self.move_up_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((10,self.b_size[1]-10-(size_button_rectangle[1]*2)), size_button_rectangle),
                                                 text="MOVE UP",
                                                 object_id='#move_up_button',
@@ -118,11 +118,11 @@ class Subblock:
                                                 object_id='#save_button',
                                                 container= subblock_container,
                                                 manager=ui_manager)
-        self.hide_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.sb_size[0]-10-(size_button_rectangle[0]*2), self.sb_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
-                                                text="HIDE",
-                                                object_id='#hide_button',
-                                                container= subblock_container,
-                                                manager=ui_manager)
+        #self.hide_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.sb_size[0]-10-(size_button_rectangle[0]*2), self.sb_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
+        #                                        text="HIDE",
+        #                                        object_id='#hide_button',
+        #                                        container= subblock_container,
+        #                                        manager=ui_manager)
         self.delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.sb_size[0]-10-(size_button_rectangle[0]*3), self.sb_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
                                                 text="DEL",
                                                 object_id='#del_button',
@@ -148,16 +148,28 @@ class Subblock_User_Input(Subblock):
                                                         container=sb_container)
         super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)
         
 class Subblock_Prototyper_Input(Subblock):
@@ -169,18 +181,29 @@ class Subblock_Prototyper_Input(Subblock):
                                                         container=sb_container)
         super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
             container=self.subblock_container)
-
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
+            container=self.subblock_container)
 class Subblock_Combine(Subblock):
     def __init__(self, ui_manager, sb_container, sb_size):
         self.subblock_container = pygame_gui.elements.UIScrollingContainer(relative_rect=pygame.Rect((0, 0), 
@@ -190,16 +213,28 @@ class Subblock_Combine(Subblock):
                                                         container=sb_container)
         super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)
         
 class Subblock_SendToGPT(Subblock):
@@ -211,16 +246,28 @@ class Subblock_SendToGPT(Subblock):
                                                         container=sb_container)
         super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)
 
 class Subblock_Image(Subblock):
@@ -250,12 +297,20 @@ class Subblock_Image(Subblock):
             container=self.subblock_container)
         
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)
 
 class Subblock_Special():
@@ -270,16 +325,28 @@ class Subblock_Special():
                                                         object_id='#Subblock_Container',
                                                         container=sb_container)
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)
         self.save_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.sb_size[0]-10-size_button_rectangle[0], self.sb_size[1]-10-size_button_rectangle[1]), size_button_rectangle),
                                                 text="SAVE",
@@ -297,14 +364,26 @@ class Subblock_Output(Subblock):
                                                         container=sb_container)
         super().__init__(ui_manager, sb_container, sb_size, self.subblock_container) 
         self.prompt_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],200)),
+            relative_rect=pygame.Rect((0, 340), (self.sb_size[0],200)),
             initial_text="enter your text here",
             container=self.subblock_container)
+        self.input_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 300), (self.sb_size[0],40)),
+            html_text="Input:",
+            container=self.subblock_container)
         self.comment_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 150), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 140), (self.sb_size[0],100)),
             initial_text="enter your comment",
             container=self.subblock_container)
+        self.comment_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.sb_size[0],40)),
+            html_text="Comment:",
+            container=self.subblock_container)
         self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 50), (self.sb_size[0],100)),
+            relative_rect=pygame.Rect((0, 40), (self.sb_size[0],40)),
             html_text="name of the subblock",
+            container=self.subblock_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.sb_size[0],40)),
+            html_text="Name:",
             container=self.subblock_container)

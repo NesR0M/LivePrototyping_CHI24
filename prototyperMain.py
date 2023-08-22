@@ -326,15 +326,11 @@ def createAsyncBlock(nameForBlock):
 
     async_block = prototyperElements.Async(nameForBlock, UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    eventText = prototyperElements.Subblock_Special((nameForBlock+"_EventText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    eventText = prototyperElements.Subblock_Special((nameForBlock+"input"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     eventText.set_input("")
-
-    sentToUser = prototyperElements.Subblock_Output((nameForBlock+"_SendToUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-    sentToUser.set_input(nameForBlock+"_EventText")
 
 
     async_block.add_subblock(eventText)
-    async_block.add_subblock(sentToUser)
 
     return async_block
 
@@ -685,19 +681,18 @@ TEXT_HIERACHY = pygame_gui.elements.UITextBox("",
                                     object_id='#text_hierachy')
 
 BUTTON_RESTART = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, screen_height-40), 
-                                                            ((screen_width/3)/2, 40)),
+                                                            ((screen_width/3), 40)),
                                                             text="RESTART",
                                                             object_id='#restart_button',
                                                             container=HIERACHY_CONTAINER,
                                                             manager=UI_MANAGER)
 
-BUTTON_ADD = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((screen_width/3)/2, screen_height-40), 
-                                                            ((screen_width/3)/2, 40)),
-                                                            text="ADD",
-                                                            object_id='#add_button',
-                                                            container=HIERACHY_CONTAINER,
-                                                            manager=UI_MANAGER)
-
+#BUTTON_ADD = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((screen_width/3)/2, screen_height-40), 
+#                                                            ((screen_width/3)/2, 40)),
+#                                                            text="ADD",
+#                                                            object_id='#add_button',
+#                                                            container=HIERACHY_CONTAINER,
+#                                                            manager=UI_MANAGER)
 
 
 
@@ -721,7 +716,7 @@ AddButtonScreen = prototyperUIElements.AddButtonScreen(UI_MANAGER,WINDOW_CONTAIN
 #--------------LOAD EXAMPLE INSTRUCTIONS:---------------------
 
 # Static Block Intro
-static_block = prototyperElements.Static("Structure",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+static_block = prototyperElements.Static("Setup",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
 input_example = prototyperElements.Subblock_User_Input("User Scenario",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 input_example.set_input("Hello! Please enter the scenario you want to Roleplay:")
@@ -772,7 +767,7 @@ loop_block.add_subblock(header_example)
 instructions.append_block(loop_block)
 
 # Async:
-instructions.append_block(createAsyncBlock("OnClickFeature"))
+instructions.append_block(createAsyncBlock("Select"))
 
 
 #------------------------------DISPLAY STARTING ELEMENTS------------------------
