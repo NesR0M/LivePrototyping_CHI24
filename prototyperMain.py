@@ -328,6 +328,7 @@ def createAsyncBlock(nameForBlock):
 
     eventText = prototyperElements.Subblock_Special((nameForBlock+" text"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     eventText.set_input("")
+    eventText.set_comment("This element stores the sentence the language learner clicked as its output.")
 
 
     async_block.add_subblock(eventText)
@@ -723,14 +724,17 @@ static_block = prototyperElements.Static("Setup",UI_MANAGER,WINDOW_CONTAINER, wi
 
 input_example = prototyperElements.Subblock_User_Input("User Scenario",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 input_example.set_input("Hello! Please enter the scenario you want to Roleplay:")
+input_example.set_comment("This element requests user input.\n Therefore it sends the input text to the language learner.\n The answer from the language learner is stored in the name of the element: \"User Scenario\"")
 
 sendToGPT_example = prototyperElements.Subblock_SendToGPT("Generate Image Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 sendToGPT_example.set_input("Based on this scenario:+User Scenario+. Create me 30 single words, delimited by comma, to create a suiting image.")
+sendToGPT_example.set_comment("This element sends a request to a generative AI for text. \n The generated text (answer from the AI) is stored in the name of the element: Generate Image Prompt")
 
 image_example = prototyperElements.Subblock_Image("Image",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 image_example.set_input("Generate Image Prompt")
 #Good Image negative prompts: nsfw, blood, sad, 
 image_example.set_negativeInput("nsfw, blood, sad")
+image_example.set_comment("This element sends a request to a generative AI for images. \n The generated image is automatically send to the language learner.")
 
 static_block.add_subblock(input_example)
 static_block.add_subblock(sendToGPT_example)
@@ -744,21 +748,27 @@ loop_block = prototyperElements.Loop("Conversation",UI_MANAGER,WINDOW_CONTAINER,
 
 conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+" text",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 conversationText_example.set_input("")
+conversationText_example.set_comment("This element stores the complete conversation between language learner and AI as its output.")
 
 lastAISentence_example = prototyperElements.Subblock_Special(loop_block.get_name()+" lastAI",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastAISentence_example.set_input("")
+lastAISentence_example.set_comment("This element stores the last sentence from the AI to the language learner as its output.")
 
 lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_name()+" lastUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastUserSentence_example.set_input("")
+lastUserSentence_example.set_comment("This element stores the last language learners' sentence as its output.")
 
 pinput_example = prototyperElements.Subblock_Prototyper_Input("Input1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 pinput_example.set_input("Converse with me to help me learn the english language. Never leave the roleplay.")
+pinput_example.set_comment("This element stores a prototyper input as its output.")
 
 concat_example = prototyperElements.Subblock_Combine("Combine Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 concat_example.set_input("Input1+The scenario for the roleplay is:+User Scenario")
+concat_example.set_comment("This element combines the outputs of other elements as its output.")
 
 header_example = prototyperElements.Subblock_Special("Conversation Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 header_example.set_input("Combine Prompt")
+header_example.set_comment("The input of this element will be the prompt for the conversational AI agent.")
 
 loop_block.add_subblock(conversationText_example)
 loop_block.add_subblock(lastAISentence_example)

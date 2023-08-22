@@ -25,6 +25,9 @@ class Subblock:
 
     def get_input(self):
         return self.input
+    
+    def set_comment(self, comment):
+        self.comment = comment
 
     def save():
         return
