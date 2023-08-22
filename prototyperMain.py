@@ -652,10 +652,10 @@ pygame.display.set_caption("Prototyper_LivePrototyping")
 background = pygame.Surface(window_size)
 
 # Initialize the pygame_gui UIManager
-UI_MANAGER = pygame_gui.UIManager(window_size)
+#UI_MANAGER = pygame_gui.UIManager(window_size)
 
 #with themes
-#UI_MANAGER = pygame_gui.UIManager(window_size, 'themes/themes.json')
+UI_MANAGER = pygame_gui.UIManager(window_size, 'themes/themes.json')
 #background.fill(UI_MANAGER.ui_theme.get_colour('dark_bg'))
 
 # Set up the game clock
@@ -752,7 +752,7 @@ pinput_example = prototyperElements.Subblock_Prototyper_Input("Prompt1",UI_MANAG
 pinput_example.set_input("Converse with me to help me learn the english language. Never leave the roleplay.")
 
 concat_example = prototyperElements.Subblock_Combine("Complete Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-concat_example.set_input("Prompt1+ The scenario for the roleplay is:+User Scenario")
+concat_example.set_input("Prompt1+The scenario for the roleplay is:+User Scenario")
 
 header_example = prototyperElements.Subblock_Special("Header",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 header_example.set_input("Complete Prompt")
@@ -767,7 +767,7 @@ loop_block.add_subblock(header_example)
 instructions.append_block(loop_block)
 
 # Async:
-instructions.append_block(createAsyncBlock("Select"))
+instructions.append_block(createAsyncBlock("Click"))
 
 
 #------------------------------DISPLAY STARTING ELEMENTS------------------------

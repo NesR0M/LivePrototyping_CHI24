@@ -28,13 +28,13 @@ class AddButtonScreen():
                                             object_id='#loop_block_button',
                                             container= self.addButton_container,
                                             manager= self.ui_manager)
-        self.post_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((container_size[0]/2)-(size_button_rectangle[0]),320), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Post-Conversation",
-                                            object_id='#post_block_button',
-                                            container= self.addButton_container,
-                                            manager= self.ui_manager)
+        #self.post_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((container_size[0]/2)-(size_button_rectangle[0]),320), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
+        #                                    text="Post-Conversation",
+        #                                    object_id='#post_block_button',
+        #                                    container= self.addButton_container,
+        #                                    manager= self.ui_manager)
         self.async_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((container_size[0]/2)-(size_button_rectangle[0]),380), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="While-Conversation",
+                                            text="Click-Conversation",
                                             object_id='#async_block_button',
                                             container= self.addButton_container,
                                             manager= self.ui_manager)
@@ -48,42 +48,51 @@ class Block():
                                                         self.b_size),
                                                         manager=ui_manager, 
                                                         object_id='#Block_Container',
-                                                        container=b_container)
-        self.name_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((0, 30), (self.b_size[0],40)),
-            html_text="name of block",
-            container=self.block_container)
+                                                        container=b_container)       
         self.name_entry_box = pygame_gui.elements.UITextEntryBox(
-            relative_rect=pygame.Rect((0, 70), (self.b_size[0],100)),
-            initial_text="enter the name of your block here",
+            relative_rect=pygame.Rect((0, 140), (self.b_size[0],40)),
+            initial_text="enter the name of the subblock",
             container=self.block_container)
+        self.name_entry_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 100), (self.b_size[0],40)),
+            html_text="Name of new element:",
+            container=self.block_container)
+        self.name_box = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 40), (self.b_size[0],40)),
+            html_text="name of the subblock",
+            container=self.block_container)
+        self.name_title = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((0, 0), (self.b_size[0],40)),
+            html_text="Set name:",
+            container=self.block_container)
+        
         self.user_input_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),200), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="User Input",
+                                            text="User input",
                                             object_id='#user_input_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
         self.prototyper_input_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),260), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Prototyper Input",
+                                            text="Prototyper input",
                                             object_id='#prototyper_input_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
         self.combine_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),320), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Combine Variables",
+                                            text="Combine variables",
                                             object_id='#combine_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
         self.sendToGPT_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),380), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Send to GPT",
+                                            text="Create text (AI)",
                                             object_id='#sendToGPT_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
         self.image_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),440), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Create Image",
+                                            text="Create image (AI)",
                                             object_id='#image_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)
         self.output_block_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((b_size[0]/2)-(size_button_rectangle[0]),500), (size_button_rectangle[0] * 2, size_button_rectangle[1])),
-                                            text="Output to Chat",
+                                            text="Output to chat",
                                             object_id='#output_block_button',
                                             container= self.block_container,
                                             manager= self.ui_manager)

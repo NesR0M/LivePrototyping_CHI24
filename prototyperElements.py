@@ -323,7 +323,12 @@ def printOut(instructionList, subblockNameForPointer):
         printOut = ""
 
         for block in instructionList:
-            printOut += f"<a href=\"{block.get_name()}\">{block.get_name()}</a></font>\n"
+            if type(block) is Static:
+                printOut += f"&#8595 <a href=\"{block.get_name()}\">{block.get_name()}</a></font>\n"
+            elif type(block) is Loop:
+                printOut += f"&#8734 <a href=\"{block.get_name()}\">{block.get_name()}</a></font>\n"
+            else:
+                printOut += f"&#8593 <a href=\"{block.get_name()}\">{block.get_name()}</a></font>\n"
 
             for subblock in block:
                 pointerStr = "  "
@@ -331,23 +336,23 @@ def printOut(instructionList, subblockNameForPointer):
                     pointerStr = "<font color=\"#FF0000\">-></font>"
                     
                 if type(subblock) is Subblock_Image:
-                    printOut += f"{pointerStr} AI <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} i* <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Combine:
-                    printOut += f"{pointerStr} + <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} & <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_SendToGPT:
-                    printOut += f"{pointerStr} AI <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} t* <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_User_Input:
-                    printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} ? <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Special and "Header" in subblock.get_name():
-                    printOut += f"{pointerStr} AI <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} t* <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Special and "Async_SendToUser" in subblock.get_name():
                     printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Special:
                     printOut += f"{pointerStr} > <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Output:
-                    printOut += f"{pointerStr} << <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 else:
-                    printOut += f"{pointerStr} - <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
+                    printOut += f"{pointerStr} + <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
 
             #if type(block) is Loop or type(block) is Async:
             #    printOut += f" -> <a href=\"END_{block.get_name()}\">SEND {block.get_name()} TO USER</a></font>\n"
