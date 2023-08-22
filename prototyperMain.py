@@ -399,19 +399,19 @@ def sync():
 
                         # Set conversationText Input                            
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+"_ConversationText"):
+                            if(subblock.get_name() == block.get_name()+" text"):
                                 subblock.set_input(conversationRAW)
                                 print(f"conversationText input: {conversationRAW}")
 
                         #Set lastAISentence Input
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+"_LastAISentence"):
+                            if(subblock.get_name() == block.get_name()+" lastAI"):
                                 subblock.set_input(output)
                                 print(f"lastAISentence input: {output}")
 
                         #Set lastUserSentence Input
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+"_LastUserSentence"):
+                            if(subblock.get_name() == block.get_name()+" lastUser"):
                                 subblock.set_input(clientInput)
                                 print(f"lastUserSentence input: {clientInput}")
 
@@ -488,7 +488,7 @@ def pushAsync():
 
                     # Set asyncEventFromUser Input
                     for subblock in block:
-                        if(subblock.get_name() == block.get_name()+"_EventText"):
+                        if(subblock.get_name() == block.get_name()+" text"):
                             subblock.set_input(splitAsyncEventFromUser[1])
 
                     # Execute subblocks
