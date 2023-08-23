@@ -306,7 +306,7 @@ def createLoopBlock(nameForBlock):
     prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+" prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     prototyper_input.set_input("Converse with me in english.")
 
-    header = prototyperElements.Subblock_Special((nameForBlock+" conversation prompt"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    header = prototyperElements.Subblock_Special((nameForBlock+" prompt"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     header.set_input(nameForBlock+" prompt1")
 
 
@@ -375,11 +375,11 @@ def sync():
                         # Send the message to the server / user
                         print("AI TEXTBLOX ERREICHT")
                         if(conversationGPT == []):
-                            prompt = getSubblockOutput("Combine Prompt")
+                            prompt = getSubblockOutput("Conversation Prompt")
                             conversationGPT.append({"role": "system", "content": prompt})
                             conversationGPT.append({"role": "user", "content": ""})
                         else:
-                            conversationGPT = gptHeaderChange(conversationGPT, getSubblockOutput("Combine Prompt"))
+                            conversationGPT = gptHeaderChange(conversationGPT, getSubblockOutput("Conversation Prompt"))
                         
                         print(conversationGPT)
 
@@ -967,7 +967,6 @@ while running:
 
 
     UI_MANAGER.update(UI_REFRESH_RATE)
-
         
     
     screen.blit(background, (0, 0))

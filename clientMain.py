@@ -149,7 +149,7 @@ def loadImage(image_data):
     background_image = pygame.image.load(image_path)
     background_image = pygame.transform.scale(background_image, image_size)
     print("Image is loaded")
-    pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+    #pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
     screen.blit(background_image, (0, 0))
     pygame.display.update()
 
@@ -386,18 +386,18 @@ BUTTON_RECORD = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((button_x
                                             object_id='#record_button',
                                             manager=UI_MANAGER)
 
-# Define the color of the line (in RGB format)
-line_color = (255, 255, 255)  # White color
-
-# Define the start and end points of the line
-start_pos = (TEXT_INPUT_X, 0)
-end_pos = (TEXT_INPUT_X, screen_height)
-
-# Define the width of the line
-line_width = 1
-
-# Draw the line
-pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+## Define the color of the line (in RGB format)
+#line_color = (255, 255, 255)  # White color
+#
+## Define the start and end points of the line
+#start_pos = (TEXT_INPUT_X, 0)
+#end_pos = (TEXT_INPUT_X, screen_height)
+#
+## Define the width of the line
+#line_width = 1
+#
+## Draw the line
+#pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
 
 pygame.display.flip()
 
@@ -425,7 +425,7 @@ getAsyncThread.start()
 
 #---------------------------WHILE-------------------------------------
 screen.blit(background, (0, 0))
-pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+#pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
 
 while running:
     UI_REFRESH_RATE = CLOCK.tick(60)/1000.0
