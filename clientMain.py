@@ -149,6 +149,7 @@ def loadImage(image_data):
     background_image = pygame.image.load(image_path)
     background_image = pygame.transform.scale(background_image, image_size)
     print("Image is loaded")
+    pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
     screen.blit(background_image, (0, 0))
     pygame.display.update()
 
@@ -423,7 +424,9 @@ getAsyncThread.start()
 
 
 #---------------------------WHILE-------------------------------------
-     
+screen.blit(background, (0, 0))
+pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+
 while running:
     UI_REFRESH_RATE = CLOCK.tick(60)/1000.0
 
@@ -541,12 +544,12 @@ while running:
 
     UI_MANAGER.update(UI_REFRESH_RATE)
 
-    if background_image is None:
-        screen.blit(background, (0, 0))
-        pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
-    else:
-        screen.blit(background_image, (0, 0))
-        pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+    #if background_image is None:
+    #    screen.blit(background, (0, 0))
+    #    pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
+    #else:
+    #    screen.blit(background_image, (0, 0))
+    #    pygame.draw.line(screen, line_color, start_pos, end_pos, line_width)
 
     UI_MANAGER.draw_ui(screen) 
 
