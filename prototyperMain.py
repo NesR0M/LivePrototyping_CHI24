@@ -45,15 +45,11 @@ def askGPT(prompt):
         
         print(f"ASKGPT REQUEST: {prompt} resulted in {output}")
         return output
-
-    except openai.error.RateLimitError as e:
-        # Retry the request after waiting for some time
+    
+    except Exception as e:
         print(f"ASKGPT ERROR: {str(e)}.\nRetrying after 5 seconds...")
         time.sleep(5)
         return askGPT(prompt)
-    
-    except Exception as e:
-        print(f"ASKGPT ERROR: {str(e)}")
 
 def whileSubblocks(block):
     index = 0
@@ -759,7 +755,7 @@ lastUserSentence_example.set_input("")
 lastUserSentence_example.set_comment("This element stores the last language learners' sentence as its output.")
 
 pinput_example = prototyperElements.Subblock_Prototyper_Input("Input1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-pinput_example.set_input("Converse with me to help me learn the english language. Never leave the roleplay.")
+pinput_example.set_input("Converse with me to help me learn the english language. Never say more then 3 sentences. Never leave the roleplay.")
 pinput_example.set_comment("This element stores a prototyper input as its output.")
 
 concat_example = prototyperElements.Subblock_Combine("Combine Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)

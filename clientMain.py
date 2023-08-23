@@ -523,7 +523,7 @@ while running:
     #Write into Textbox_Output
     if(updateUI):
         print(f"Output for TextBox: {outputTextConversation}")
-        for i in range(3):
+        for i in range(6):
             TEXT_OUTPUT.set_text(outputTextConversation)
             UI_MANAGER.draw_ui(screen) 
             pygame.display.update()
