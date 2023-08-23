@@ -151,6 +151,17 @@ def combineInput(sublockInput):
         concatOuts += " " + getSubblockOutput(name)
     return concatOuts
 
+# TODO []
+#def combineInput(string):
+#    # Find all variable placeholders within brackets
+#    variables = [var.strip("[]") for var in string.split("[") if "]" in var]
+#    if(variables != None):
+#    # Replace each variable placeholder with its corresponding value
+#        for var in variables:
+#            value = getSubblockOutput(var)  # Call the getOutput() function to obtain the value
+#            string = string.replace("[" + var + "]", str(value))
+#    return string
+
 def getSubblockOutput(subblockName):
     # call getBlocks on instructions (list) -> call getSubblocks on blocks (list) -> call getOutput on subblock
     # return the value from getOutput for the one with matching name
