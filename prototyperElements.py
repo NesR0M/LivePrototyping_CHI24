@@ -346,7 +346,7 @@ def printOut(instructionList, subblockNameForPointer):
                     printOut += f"{pointerStr} t* <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_User_Input:
                     printOut += f"{pointerStr} ? <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
-                elif type(subblock) is Subblock_Special and "Header" in subblock.get_name():
+                elif type(subblock) is Subblock_Special and "Conversation Prompt" in subblock.get_name():
                     printOut += f"{pointerStr} t* <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
                 elif type(subblock) is Subblock_Special and "Async_SendToUser" in subblock.get_name():
                     printOut += f"{pointerStr} < <a href=\"{subblock.get_name()}\">{subblock.get_name()}</a>\n"
