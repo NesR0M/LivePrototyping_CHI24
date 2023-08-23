@@ -191,6 +191,14 @@ def saveAudioToFile():
     wf.writeframes(b''.join(audio_frames))
     wf.close()
 
+def sendToWhisper(audio_file):
+    try:
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        return transcript 
+    except Exception as e:
+        print(f"WISPER ERROR: {str(e)}.\nRetrying after 5 seconds...")
+        time.sleep(5)
+        return sendToWhisper(audio_file)
 
 #---------------------SOCKET THREADS----------------------------------
 
@@ -485,12 +493,13 @@ while running:
                 #send file to whisper
                 audio_file = open("sounds/output.wav", "rb")
                 if  duration > 1:
-                    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+                    
+                    transcript = sendToWhisper(audio_file)
 
-
-                    TEXT_INPUT.set_text(transcript.text)
-                    TEXT_INPUT.focus()
-                    print(transcript.text)
+                    if(transcript != None):
+                        TEXT_INPUT.set_text(transcript.text)
+                        TEXT_INPUT.focus()
+                        print(transcript.text)
                 else:
                     print("Audio duration under limit")
             
@@ -547,6 +556,7 @@ while running:
 syncThread.join()
 pushAsyncThread.join()
 getAsyncThread.join()
+
 
 # Quit Pygame
 pygame.mixer.quit()
