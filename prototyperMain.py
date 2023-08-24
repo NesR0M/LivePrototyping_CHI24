@@ -33,6 +33,7 @@ visibleBlock = None
 
 doRestart = False
 
+
 #-------------------------------BRAIN--------------------------------
 def askGPT(prompt):
     task = []
@@ -465,10 +466,13 @@ def sync():
 
         except Exception as e:
             print(f'Exception in sync thread {str(e)}')
-            break
-      
-    sync_socket.close()
+            sync_socket.close()
+            push_async_socket.close()
+            get_async_socket.close()
 
+            time.sleep(2)
+            
+            connectToSockets()
 
 def pushAsync():
     global push_async_socket
@@ -514,46 +518,44 @@ def pushAsync():
 
         except Exception as e:
             print(f'Exception in pushAsync thread {str(e)}')
-            break
+            #push_async_socket.close()
+            time.sleep(2)
 
-    push_async_socket.close()
 
 def getAsync():
-        global get_async_socket
+    global get_async_socket
 
-        #stableIteration = 0
-        #stablePicture(stableIteration, "beach, blue, sand, waves, ocean, jellyfish, purple, sunset")
-        #stableIteration += 1
+    #stableIteration = 0
+    #stablePicture(stableIteration, "beach, blue, sand, waves, ocean, jellyfish, purple, sunset")
+    #stableIteration += 1
 
-
-        while True:
-            try:
-                response = get_async_socket.recv(1024).decode()
-                print(response)
-            
-                ## Send the message to the server / user
-                #testdict = {
-                #    "label": "test",
-                #    "content": "Mustang"
-                #}
-                #testBytes = pickle.dumps(testdict)  
-                #
-                #testBytes_size = len(testBytes).to_bytes(4, byteorder='big')  # Convert image size to 4 bytes
-                #get_async_socket.sendall(testBytes_size)  # Send the image size to the client
-                #get_async_socket.sendall(testBytes)  # Send the image data to the client
+    while True:
+        try:
+            response = get_async_socket.recv(1024).decode()
+            print(response)
+        
+            ## Send the message to the server / user
+            #testdict = {
+            #    "label": "test",
+            #    "content": "Mustang"
+            #}
+            #testBytes = pickle.dumps(testdict)  
+            #
+            #testBytes_size = len(testBytes).to_bytes(4, byteorder='big')  # Convert image size to 4 bytes
+            #get_async_socket.sendall(testBytes_size)  # Send the image size to the client
+            #get_async_socket.sendall(testBytes)  # Send the image data to the client
 #
-                #response = get_async_socket.recv(1024).decode()
-                #print(response)
+            #response = get_async_socket.recv(1024).decode()
+            #print(response)
 #
-                #
-                #time.sleep(5) # TODO remove (just for testing)
-    
-            except:
-                # code to handle the exception
-                print("Connection to getAsync socket closed")
-                break
+            #
+            #time.sleep(5) # TODO remove (just for testing)
 
-        get_async_socket.close()
+        except Exception as e:
+            print(f'Exception in getAsync thread {str(e)}')
+            #get_async_socket.close()
+            time.sleep(2)
+
 
 def stablePicture(stableIteration, imagePrompt):
     host = PICTURE_HOST
@@ -604,42 +606,48 @@ def receive_image(server_socket, image_path):
         
     print(f'Image received and saved as {image_path}')
 
-while(True):
-    try:
-        sync_socket.connect((userHost, syncPort))
-        push_async_socket.connect((userHost, pushAsyncPort))
-        get_async_socket.connect((userHost, getAsyncPort))
-        print(f'Connected to server over all sockets: {userHost}:{syncPort}/{pushAsyncPort}/{getAsyncPort}')
-          
-    except:
-        # code to handle the exception
-        print("Could not connect to server over all sockets.")
+def connectToSockets():
+    global sync_socket
+    global push_async_socket
+    global get_async_socket 
 
-        sync_socket.close()
-        push_async_socket.close()
-        get_async_socket.close()
+    while(True):
+        try:
+            sync_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            push_async_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            get_async_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        time.sleep(2)
-        continue
+            sync_socket.connect((userHost, syncPort))
+            push_async_socket.connect((userHost, pushAsyncPort))
+            get_async_socket.connect((userHost, getAsyncPort))
+            print(f'Connected to server over all sockets: {userHost}:{syncPort}/{pushAsyncPort}/{getAsyncPort}')
+            
+        except Exception as e:
+            print(f'Exception when trying to connect to end-user: {str(e)}')
 
-    syncThread = threading.Thread(target=sync)
-    syncThread.start()
+            time.sleep(2)
+            continue
+        
+        break
 
-    pushAsyncSocket = threading.Thread(target=pushAsync)
-    pushAsyncSocket.start()
-
-    getAsyncSocket = threading.Thread(target=getAsync)
-    getAsyncSocket.start()
-
-    break
-
-#-------------------------------PYGAME-------------------------------
+#-------------------------------PYGAME / MAIN -------------------------------
 
 running = True
+
 
 # Initialize Pygame
 pygame.init()
 pygame.mixer.init()
+
+# Initialize Threads
+syncThread = threading.Thread(target=sync)
+pushAsyncSocket = threading.Thread(target=pushAsync)
+getAsyncSocket = threading.Thread(target=getAsync)
+connectToSockets()
+
+syncThread.start()
+pushAsyncSocket.start()
+getAsyncSocket.start()
 
 screen_width = 1152
 screen_height = 768
@@ -998,3 +1006,7 @@ pygame.quit()
 syncThread.join()
 pushAsyncSocket.join()
 getAsyncSocket.join()
+
+sync_socket.close()
+push_async_socket.close()
+get_async_socket.close()

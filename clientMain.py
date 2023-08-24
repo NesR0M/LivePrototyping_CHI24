@@ -256,9 +256,10 @@ def syncSocket_thread():
       
         except Exception as e:
             print(f'Socket error: {str(e)}') 
-            break
-        
-    syncSocket.close()
+            prototyper_socket.close()
+            time.sleep(2)
+            prototyper_socket, address = syncSocket.accept()
+            print(f'Connected to client: {address[0]}:{address[1]}')
 
 def pushAsyncSocket_thread():
     global running
@@ -291,9 +292,10 @@ def pushAsyncSocket_thread():
       
         except Exception as e:
             print(f'Socket error: {str(e)}') 
-            break
-
-    pushAsyncSocket.close()
+            prototyper_socket.close()
+            time.sleep(2)
+            prototyper_socket, address = pushAsyncSocket.accept()
+            print(f'Connected to client: {address[0]}:{address[1]}')
 
 def getAsyncSocket_thread():
     global running
@@ -341,9 +343,10 @@ def getAsyncSocket_thread():
       
         except Exception as e:
             print(f'Get async socket error: {str(e)}') 
-            break
-        
-    getAsyncSocket.close()
+            prototyper_socket.close()
+            time.sleep(2)
+            prototyper_socket, address = getAsyncSocket.accept()
+            print(f'Connected to client: {address[0]}:{address[1]}')
 
 #---------------------------UI------------------------------
 
@@ -560,6 +563,9 @@ syncThread.join()
 pushAsyncThread.join()
 getAsyncThread.join()
 
+syncSocket.close()
+pushAsyncSocket.close()
+getAsyncSocket.close()
 
 # Quit Pygame
 pygame.mixer.quit()
