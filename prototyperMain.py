@@ -305,13 +305,13 @@ def gptAddUserInput(conversation, content):
 def createLoopBlock(nameForBlock):
     loop_block = prototyperElements.Loop(nameForBlock,UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-    conversationText = prototyperElements.Subblock_Special((nameForBlock+" text"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    conversationText = prototyperElements.Subblock_Special((nameForBlock+" conversationText"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     conversationText.set_input("")
 
-    lastAISentence = prototyperElements.Subblock_Special((nameForBlock+" lastAI"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastAISentence = prototyperElements.Subblock_Special((nameForBlock+" lastAISentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     lastAISentence.set_input("")
 
-    lastUserSentence = prototyperElements.Subblock_Special((nameForBlock+" lastUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+    lastUserSentence = prototyperElements.Subblock_Special((nameForBlock+" lastUserSentence"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
     lastUserSentence.set_input("")
 
     prototyper_input = prototyperElements.Subblock_Prototyper_Input((nameForBlock+" prompt1"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
@@ -406,19 +406,19 @@ def sync():
 
                         # Set conversationText Input                            
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+" text"):
+                            if(subblock.get_name() == "conversationText"):
                                 subblock.set_input(conversationRAW)
                                 print(f"conversationText input: {conversationRAW}")
 
                         #Set lastAISentence Input
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+" lastAI"):
+                            if(subblock.get_name() == "lastAISentence"):
                                 subblock.set_input(output)
                                 print(f"lastAISentence input: {output}")
 
                         #Set lastUserSentence Input
                         for subblock in block:
-                            if(subblock.get_name() == block.get_name()+" lastUser"):
+                            if(subblock.get_name() == "lastUserSentence"):
                                 subblock.set_input(clientInput)
                                 print(f"lastUserSentence input: {clientInput}")
 
@@ -753,35 +753,39 @@ instructions.append_block(static_block)
 # Loop Block:
 loop_block = prototyperElements.Loop("Conversation",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 
-conversationText_example = prototyperElements.Subblock_Special(loop_block.get_name()+" text",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+conversationText_example = prototyperElements.Subblock_Special("conversationText",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 conversationText_example.set_input("")
 conversationText_example.set_comment("This element stores the complete conversation between language learner and AI as its output.")
 
-lastAISentence_example = prototyperElements.Subblock_Special(loop_block.get_name()+" lastAI",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastAISentence_example = prototyperElements.Subblock_Special("lastAISentence",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastAISentence_example.set_input("")
 lastAISentence_example.set_comment("This element stores the last sentence from the AI to the language learner as its output.")
 
-lastUserSentence_example = prototyperElements.Subblock_Special((loop_block.get_name()+" lastUser"),UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+lastUserSentence_example = prototyperElements.Subblock_Special("lastUserSentence",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
 lastUserSentence_example.set_input("")
 lastUserSentence_example.set_comment("This element stores the last language learners' sentence as its output.")
 
-pinput_example = prototyperElements.Subblock_Prototyper_Input("Input1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-pinput_example.set_input("Converse with me to help me learn the english language. Never say more then 3 sentences. Never leave the roleplay.")
-pinput_example.set_comment("This element stores a prototyper input as its output.")
-
-concat_example = prototyperElements.Subblock_Combine("Combine Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-concat_example.set_input("Input1+The scenario for the roleplay is:+User Scenario")
-concat_example.set_comment("This element combines the outputs of other elements as its output.")
+#pinput_example = prototyperElements.Subblock_Prototyper_Input("Input1",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+#pinput_example.set_input("Converse with me to help me learn the english language. Never say more than 3 sentences. Never leave the roleplay.")
+#pinput_example.set_comment("This element stores a prototyper input as its output.")
+#
+#concat_example = prototyperElements.Subblock_Combine("Combine Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+#concat_example.set_input("Input1+The scenario for the roleplay is:+User Scenario")
+#concat_example.set_comment("This element combines the outputs of other elements as its output.")
+#
+#header_example = prototyperElements.Subblock_Special("Conversation Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
+#header_example.set_input("Combine Prompt")
+#header_example.set_comment("The input of this element will be the prompt for the conversational AI agent.")
 
 header_example = prototyperElements.Subblock_Special("Conversation Prompt",UI_MANAGER,WINDOW_CONTAINER, window_container_size)
-header_example.set_input("Combine Prompt")
+header_example.set_input("Converse with me to help me learn the english language. Never say more than 3 sentences. Never leave the roleplay. The scenario for the roleplay is:+User Scenario")
 header_example.set_comment("The input of this element will be the prompt for the conversational AI agent.")
 
 loop_block.add_subblock(conversationText_example)
 loop_block.add_subblock(lastAISentence_example)
 loop_block.add_subblock(lastUserSentence_example)
-loop_block.add_subblock(pinput_example)
-loop_block.add_subblock(concat_example)
+#loop_block.add_subblock(pinput_example)
+#loop_block.add_subblock(concat_example)
 loop_block.add_subblock(header_example)
 
 instructions.append_block(loop_block)
