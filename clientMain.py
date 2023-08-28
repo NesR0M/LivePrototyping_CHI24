@@ -9,7 +9,7 @@ import wave
 import queue
 import threading
 import re
-from clientKeys import OPENAI_API_KEY, ELEVEN_API_KEY, USE_TTS, SYNC_PORT, PUSH_ASYNC_PORT, GET_ASYNC_PORT
+from clientKeys import OPENAI_API_KEY, ELEVEN_API_KEY, USE_ELEVEN_TTS, SYNC_PORT, PUSH_ASYNC_PORT, GET_ASYNC_PORT
 import win32com.client as wincl
 from elevenlabs import generate, play
 from elevenlabs import set_api_key
@@ -120,7 +120,7 @@ def extract_text(input_string):
 
 # TTS Windows:
 def tts_thread(output):
-    if(USE_TTS):
+    if(USE_ELEVEN_TTS):
         audio = generate(
             text=output,
             voice="Bella",
