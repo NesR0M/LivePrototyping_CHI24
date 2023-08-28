@@ -1,0 +1,15 @@
+# Byte-compiled / optimized / DLL files
+# directorys: __pycache__/
+# extentions: *.so
+
+# to ignore:
+prototyperKeys.py
+clientKeys.py
+
+output.png
+*.png
+
+__pycache__/
+sounds/output.wav
+.vscode/
+
