@@ -5,8 +5,8 @@ import pickle
 import threading
 import socket
 import time
-import prototyper_dependencies.prototyperElements as prototyperElements
-import prototyper_dependencies.prototyperUIElements as prototyperUIElements
+import prototyperElements
+import prototyperUIElements
 from prototyperKeys import OPENAI_API_KEY, USER_HOST, SYNC_PORT, PUSH_ASYNC_PORT, GET_ASYNC_PORT, PICTURE_HOST, PICTURE_PORT
 sync_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 push_async_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
